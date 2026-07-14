@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE CLEAVE — early exit</title>
+<style>
+  :root{--bg:#160f2e;--ink:#f2ecff;--ink2:#c3b6e6;--dim:#8a7fb0;--line:#2e2450;
+    --orange:#f0913a;--cyan:#46c7d8;--purple:#b48ad8;--ok:#65d6a2;--miss:#e0705a;--brass:#e6c069;
+    --lit:#65d6c0;--fig:#c1a6ea;--wall:#e88a76}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(ellipse at 50% -10%,#241650,#120a24 78%);color:var(--ink);
+    font-family:ui-sans-serif,system-ui,sans-serif;padding:22px 14px;min-height:100vh;font-size:13px}
+  .wrap{max-width:900px;margin:0 auto}
+  nav{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:14px}
+  nav b{color:var(--brass);font-weight:800;letter-spacing:.06em} nav a{color:var(--ink2);text-decoration:none} nav a:hover{color:var(--orange)} nav .home{color:var(--dim)}
+  header{text-align:center;margin-bottom:12px}
+  header h1{font-size:21px;font-weight:700;font-family:'Iowan Old Style',Palatino,Georgia,serif;color:var(--orange);letter-spacing:.02em}
+  header .sub{font-size:12px;color:var(--ink2);margin:6px auto 0;max-width:700px;font-style:italic;line-height:1.5}
+  .tag{display:inline-block;font-size:9px;font-weight:800;padding:1px 6px;border-radius:9px;vertical-align:middle}
+  .tag.lit{background:rgba(101,214,192,.14);color:var(--lit);border:1px solid var(--lit)}
+  .tag.fig{background:rgba(193,166,234,.13);color:var(--fig);border:1px solid var(--fig)}
+  .tag.wall{background:rgba(232,138,118,.12);color:var(--wall);border:1px solid var(--wall)}
+  .tiers{text-align:center;font-size:10.5px;color:var(--dim);margin-top:6px}
+  .stage{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;margin-top:14px}
+  @media(max-width:680px){.stage{grid-template-columns:1fr}}
+  .panel{background:rgba(8,4,20,.55);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+  .panel h2{font-size:10.5px;font-weight:800;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin-bottom:10px}
+  #stack{font-family:ui-monospace,Menlo,Consolas,monospace}
+  .row{display:flex;align-items:center;gap:8px;height:19px;font-size:11px}
+  .row .ln{width:34px;color:var(--dim);text-align:right;font-size:10px}
+  .row .track{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(180,138,216,.10),rgba(70,199,216,.10));position:relative;overflow:hidden}
+  .row .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+  .row .cf{width:44px;text-align:right;font-size:10px;color:var(--ink2)}
+  .exitmark{box-shadow:0 0 0 2px var(--bg),0 0 0 3px currentColor}
+  #hist{display:flex;align-items:flex-end;gap:3px;height:120px;margin-top:4px}
+  #hist .b{flex:1;background:linear-gradient(180deg,var(--orange),#a8531f);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+  #hist .b span{position:absolute;bottom:-15px;left:0;right:0;text-align:center;font-size:8px;color:var(--dim)}
+  .hud{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.85;margin-top:2px}
+  .hud .k{color:var(--dim)} .hud b{color:var(--ink)}
+  .big{font-size:15px}
+  .ctl{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:center;margin:16px 0 4px}
+  button{background:transparent;color:var(--orange);border:1px solid var(--orange);padding:7px 15px;font-family:ui-monospace,monospace;font-weight:700;cursor:pointer;font-size:11px;border-radius:6px}
+  button:hover{background:rgba(240,145,58,.12)} button.alt{color:var(--cyan);border-color:var(--cyan)} button.alt:hover{background:rgba(70,199,216,.12)}
+  label{font-family:ui-monospace,monospace;font-size:11px;color:var(--ink2)}
+  input[type=range]{accent-color:var(--orange);width:150px;vertical-align:middle}
+  #sweep{width:100%;height:150px;display:block}
+  footer{font-size:11px;color:var(--ink2);line-height:1.6;border-top:1px solid var(--line);padding-top:13px;margin-top:18px}
+  footer b{color:var(--ink)} .fdim{color:var(--dim)}
+</style></head><body><div class="wrap">
+<nav>
+  <b>A SCANNER DARKLY</b><span class="home">›</span>
+  <a href="../the-stitch/">the stitch</a>
+  <a href="../the-draft/">the draft</a>
+  <a href="../the-dark-glass/">the dark glass</a>
+  <a href="../the-inference-layer/">the inference layer ↗</a>
+  <a class="home" href="../ud0/">ud0 ⌂</a>
+</nav>
+<header>
+  <h1>THE CLEAVE</h1>
+  <div class="sub">Not every token is worth the whole model. The confident ones can <b>cleave early</b> — read the answer off a shallow layer and stop. Drag the confidence gate and watch the compute you save trade against the answers you break.</div>
+  <div class="tiers"><span class="tag lit">LIT</span> the exit rule &amp; every number below, computed live &nbsp; <span class="tag fig">FIG</span> a toy 12-layer confidence field &nbsp; <span class="tag wall">WALL</span> a real multi-exit model</div>
+</header>
+
+<div class="ctl">
+  <button id="run">▶ run a batch</button>
+  <button id="batch" class="alt">↻ new tokens</button>
+  <label>confidence gate&nbsp;τ = <b id="tv" style="color:var(--brass)">0.90</b></label>
+  <input type="range" id="tau" min="50" max="99" step="1" value="90">
+</div>
+
+<div class="stage">
+  <div class="panel">
+    <h2>The stack — one token cleaving out</h2>
+    <div id="stack"></div>
+    <div style="font-size:10px;color:var(--dim);margin-top:8px;line-height:1.5">Each layer refines the guess; the bar is the model's confidence in its current top token. The token <b style="color:var(--ok)">cleaves out</b> at the first layer whose confidence clears τ — everything above it is never computed for this token.</div>
+  </div>
+  <div class="panel">
+    <h2>Live readout</h2>
+    <div class="hud" id="hud"></div>
+    <h2 style="margin-top:16px">Where the batch exits</h2>
+    <div id="hist"></div>
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<div class="panel" style="margin-top:12px">
+  <h2>The whole tradeoff — sweep τ from loose to strict</h2>
+  <canvas id="sweep" width="860" height="150"></canvas>
+  <div style="font-size:10px;color:var(--dim);margin-top:6px;line-height:1.5"><span style="color:var(--orange)">■</span> compute saved &nbsp; <span style="color:var(--cyan)">■</span> agreement with the full-depth answer &nbsp;·&nbsp; the dashed line is your current τ. Loose gate → cheap but wrong more often; strict gate → faithful but you pay for depth you didn't need. The <b>knee</b> is the whole game.</div>
+</div>
+
+<footer>
+  <b>What is real here:</b> the decision rule — <i>exit at the first layer whose top-token probability clears τ</i> — is exactly <b>CALM</b> (Confident Adaptive Language Modeling) and the family of <b>early-exit / adaptive-depth</b> inference. Every number on this page (average exit depth, % compute saved, agreement, the whole sweep curve) is <b>computed live in your browser</b> from the token field, not baked. <span class="tag lit">LIT</span>
+  <div style="margin-top:8px"><b>What is a figure:</b> the per-token, per-layer confidence is a <i>toy field</i> — a synthetic 12-layer curve, not the readouts of a trained multi-exit transformer. "Agreement" is measured against this toy's own full-depth answer (as a right/wrong correctness class, not a specific token id), not against ground truth. <span class="tag fig">FIG</span></div>
+  <div style="margin-top:8px"><b>Where it stops:</b> a real early-exit model needs trained per-layer exit classifiers on a shared trunk, and even a token that exits early still has its key/value computed so <i>later</i> tokens can attend to it — the "state-copying" cost this toy abstracts away. So "compute saved" is the scheme's idealized accounting, not a measured FLOP count. <span class="tag wall">WALL</span></div>
+  <div class="fdim" style="margin-top:10px">A sibling of <a href="../the-draft/" style="color:var(--cyan)">the draft</a> (speculative decoding — cleave a whole run at once) and <a href="../the-stitch/" style="color:var(--brass)">the stitch</a> (the same idea as a factory floor). Part of <b style="color:var(--brass)">A SCANNER DARKLY</b>. &ldquo;We see through a glass, darkly.&rdquo; · David Lee Wise (ROOT0) / TriPod LLC · with AVAN.</div>
+</footer>
+</div>
+<script>
+"use strict";
+(function(){
+const N=12, M=48;                       // 12 layers, 48 tokens per batch
+const C={orange:"#f0913a",cyan:"#46c7d8",purple:"#b48ad8",ok:"#65d6a2",miss:"#e0705a",dim:"#8a7fb0",ink:"#f2ecff",brass:"#e6c069"};
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+let seed=1234, rnd=mulberry32(seed), tokens=[];
+
+// build a token as a CALIBRATED early-exit trajectory: confidence starts at a coin-flip
+// (~0.5) and climbs with depth (slower for hard tokens); the top token is correct with
+// probability equal to that confidence — so a loose gate buys speed at ~chance accuracy,
+// a strict gate waits for the depth that actually earns it.
+function makeToken(){
+  const d=0.05+0.92*rnd();               // difficulty
+  const thr=0.26+0.44*d;                 // depth at which confidence crosses ~0.73
+  const conf=[], top=[];
+  for(let l=1;l<=N;l++){
+    const p=l/N;
+    const S=1/(1+Math.exp(-9*(p-thr)));        // 0..1 sigmoid in depth
+    let c=0.5+0.46*S+(rnd()-0.5)*0.05;         // confidence: 0.5 -> ~0.96
+    c=Math.min(0.998,Math.max(0.5,c));
+    conf.push(c);
+    top.push(rnd()<c?'R':'W');                 // calibrated: correct with prob = confidence
+  }
+  return {d,conf,top,finalTop:top[N-1]};
+}
+function newBatch(){ rnd=mulberry32(seed); tokens=[]; for(let i=0;i<M;i++) tokens.push(makeToken()); }
+
+function exitLayer(tk,tau){ for(let l=0;l<N;l++){ if(tk.conf[l]>=tau) return l+1; } return N; }
+
+let tau=0.90;
+const hud=document.getElementById('hud'), hist=document.getElementById('hist'), stackEl=document.getElementById('stack');
+const sweep=document.getElementById('sweep'), sx=sweep.getContext('2d');
+
+function aggregate(tau){
+  let sumD=0, agree=0, byLayer=new Array(N).fill(0);
+  for(const tk of tokens){ const L=exitLayer(tk,tau); sumD+=L; byLayer[L-1]++; if(tk.top[L-1]===tk.finalTop) agree++; }
+  const avg=sumD/tokens.length;
+  return {avg, saved:1-avg/N, agreement:agree/tokens.length, byLayer};
+}
+
+function renderStack(tk){
+  const L = tk? exitLayer(tk,tau):0;
+  let h="";
+  for(let l=N;l>=1;l--){
+    const c = tk? tk.conf[l-1]:0;
+    const isExit = tk && l===L;
+    const top = tk? tk.top[l-1]:'';
+    const col = !tk? C.dim : (l<L? "rgba(180,138,216,.5)" : l===L? (tk.top[L-1]===tk.finalTop?C.ok:C.miss) : "rgba(70,199,216,.22)");
+    const cf = tk? (c*100).toFixed(0)+'%':'';
+    h+=`<div class="row"><div class="ln">L${l}</div>`+
+       `<div class="track"><div class="fill${isExit?' exitmark':''}" style="width:${(tk?c*100:0).toFixed(0)}%;background:${col};color:${col}"></div></div>`+
+       `<div class="cf" style="color:${isExit?col:C.dim}">${cf}${isExit?' ✂':''}</div></div>`;
+  }
+  stackEl.innerHTML=h;
+}
+function renderHist(byLayer){
+  const mx=Math.max(1,...byLayer);
+  hist.innerHTML=byLayer.map((v,i)=>`<div class="b" style="height:${(v/mx*100).toFixed(1)}%"><span>${i+1}</span></div>`).join('');
+}
+function renderHud(a){
+  hud.innerHTML=
+    `<div><span class="k">avg exit depth </span><b class="big" style="color:${C.orange}">${a.avg.toFixed(1)}</b><span class="k"> / ${N} layers</span></div>`+
+    `<div><span class="k">compute saved </span><b class="big" style="color:${C.orange}">${(a.saved*100).toFixed(0)}%</b></div>`+
+    `<div><span class="k">agreement w/ full depth </span><b class="big" style="color:${a.agreement>0.9?C.ok:a.agreement>0.8?C.brass:C.miss}">${(a.agreement*100).toFixed(1)}%</b></div>`+
+    `<div><span class="k">broken by cleaving </span><b style="color:${C.miss}">${((1-a.agreement)*tokens.length).toFixed(0)}</b><span class="k"> / ${tokens.length} tokens</span></div>`;
+}
+function renderSweep(){
+  const W=sweep.width,H=sweep.height,pad=6;
+  sx.clearRect(0,0,W,H);
+  const pts=[];
+  for(let t=0;t<=60;t++){ const tv=0.5+0.495*(t/60); const a=aggregate(tv); pts.push({tv,saved:a.saved,agr:a.agreement}); }
+  const X=tv=>pad+(tv-0.5)/0.495*(W-2*pad);
+  const Y=v=>H-pad-v*(H-2*pad);
+  // agreement
+  sx.lineWidth=2; sx.strokeStyle=C.cyan; sx.beginPath();
+  pts.forEach((p,i)=>{const x=X(p.tv),y=Y(p.agr); i?sx.lineTo(x,y):sx.moveTo(x,y);}); sx.stroke();
+  // saved
+  sx.strokeStyle=C.orange; sx.beginPath();
+  pts.forEach((p,i)=>{const x=X(p.tv),y=Y(p.saved); i?sx.lineTo(x,y):sx.moveTo(x,y);}); sx.stroke();
+  // current tau
+  sx.strokeStyle="rgba(230,192,105,.8)"; sx.setLineDash([4,4]); sx.beginPath();
+  sx.moveTo(X(tau),pad); sx.lineTo(X(tau),H-pad); sx.stroke(); sx.setLineDash([]);
+  sx.fillStyle=C.dim; sx.font="9px ui-monospace,monospace";
+  sx.fillText("τ 0.50",pad,H-1); sx.fillText("0.995",W-32,H-1);
+}
+
+function refresh(){ const a=aggregate(tau); renderHist(a.byLayer); renderHud(a); renderSweep(); }
+
+// animate one batch: stream tokens, light each exit into the histogram
+let anim=null;
+function run(){
+  if(anim){clearInterval(anim);anim=null;document.getElementById('run').textContent="▶ run a batch";return;}
+  let i=0, byLayer=new Array(N).fill(0), sumD=0, agree=0;
+  document.getElementById('run').textContent="⏸ pause";
+  anim=setInterval(()=>{
+    if(i>=tokens.length){ clearInterval(anim);anim=null;document.getElementById('run').textContent="▶ run a batch"; refresh(); return; }
+    const tk=tokens[i]; const L=exitLayer(tk,tau);
+    renderStack(tk); byLayer[L-1]++; sumD+=L; if(tk.top[L-1]===tk.finalTop) agree++;
+    renderHist(byLayer);
+    hud.innerHTML=`<div><span class="k">streaming </span><b>${i+1}/${tokens.length}</b><span class="k"> — this token cleaved at </span><b style="color:${tk.top[L-1]===tk.finalTop?C.ok:C.miss}">L${L}</b></div>`+
+      `<div><span class="k">running avg depth </span><b style="color:${C.orange}">${(sumD/(i+1)).toFixed(1)}</b><span class="k"> · saved </span><b style="color:${C.orange}">${((1-(sumD/(i+1))/N)*100).toFixed(0)}%</b><span class="k"> · agree </span><b>${(agree/(i+1)*100).toFixed(0)}%</b></div>`;
+    i++;
+  },90);
+}
+
+document.getElementById('tau').oninput=function(){ tau=(+this.value)/100; document.getElementById('tv').textContent=tau.toFixed(2); refresh(); };
+document.getElementById('run').onclick=run;
+document.getElementById('batch').onclick=function(){ if(anim){clearInterval(anim);anim=null;document.getElementById('run').textContent="▶ run a batch";} seed=(seed*1103515245+12345)&0x7fffffff; newBatch(); renderStack(tokens[0]); refresh(); };
+
+newBatch(); renderStack(tokens[0]); refresh();
+})();
+</script></body></html>
